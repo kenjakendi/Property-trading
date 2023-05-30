@@ -5,7 +5,7 @@ pragma solidity >=0.7.0 <0.9.0;
 import "./Ownable.sol";
 
 /**
- * @title Owner
+ * @title PropertyManager
  * @dev Property contract
  */
 
@@ -31,7 +31,7 @@ contract PropertyManager is Ownable {
 
     // Modifiers
     modifier onlyPropertyOwner(uint id){
-        require(msg.sender == propertyToOwner[id]);
+        require(msg.sender == propertyToOwner[id], "Only property owner can call this function.");
         _;
     }
 
@@ -48,7 +48,7 @@ contract PropertyManager is Ownable {
         properties[id].price = newPrice;
     }
 
-    function toggleForSale(uint id) external onlyPropertyOwner(id){
+    function toggleForSale(uint id) public onlyPropertyOwner(id){
         if (properties[id].forSale){
             properties[id].forSale = false;
             propertiesForSale--;
@@ -70,7 +70,26 @@ contract PropertyManager is Ownable {
         }
     }
 
-    function getForSaleProperties() public view returns (Property[] memory) {
+    function buyProperty(uint id) payable external {
+        require(properties[id].forSale, "Property is not for sale.");
+        require(msg.value == properties[id].price, "Value and price are not equal.");
+
+        address oldOwner = propertyToOwner[id];
+        address newOwner = msg.sender;
+
+        (bool sent,) = oldOwner.call{value: msg.value}("");
+        require(sent, "Failed to send Ether");
+        // oldOwner.transfer(msg.value);
+
+        propertyToOwner[id] = newOwner;
+        ownerPropertiesCount[oldOwner]--;
+        ownerPropertiesCount[newOwner]++;
+        toggleForSale(id);
+
+    }
+
+    // View Functions
+    function getForSaleProperties() external view returns (Property[] memory) {
         Property[] memory forSaleProperties = new Property[](propertiesForSale);
         uint counter = 0;
         for (uint i = 0; i < properties.length; i++){
@@ -81,5 +100,26 @@ contract PropertyManager is Ownable {
             }
         }
         return forSaleProperties;
+    }
+
+    function getOwnerProperties(address owner) public view returns (Property[] memory) {
+        Property[] memory myProperties = new Property[](ownerPropertiesCount[owner]);
+        uint counter = 0;
+        for (uint i = 0; i < properties.length; i++){
+            Property memory prop = properties[i];
+            if (propertyToOwner[i] == owner) {
+                myProperties[counter] = prop;
+                counter++;
+            }
+        }
+        return myProperties;
+    }
+
+    function getMyProperties() external view returns (Property[] memory) {
+        return getOwnerProperties(msg.sender);
+    }
+
+    function getAllProperties() external view returns (Property[] memory) {
+        return properties;
     }
 }
