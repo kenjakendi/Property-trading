@@ -79,7 +79,6 @@ contract PropertyManager is Ownable {
 
         (bool sent,) = oldOwner.call{value: msg.value}("");
         require(sent, "Failed to send Ether");
-        // oldOwner.transfer(msg.value);
 
         propertyToOwner[id] = newOwner;
         ownerPropertiesCount[oldOwner]--;
