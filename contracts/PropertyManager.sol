@@ -23,6 +23,7 @@ contract PropertyManager is Ownable {
 
     // Structs
     struct Property {
+        uint id;
         string title;
         string info;
         bool forSale;
@@ -60,8 +61,8 @@ contract PropertyManager is Ownable {
 
     // Functions
     function createProperty(string memory title, string memory info, bool forSale, uint price) public {
-        properties.push(Property(title, info, forSale, price));
-        uint id = properties.length - 1;
+        uint id = properties.length;
+        properties.push(Property(id, title, info, forSale, price));
         propertyToOwner[id] = msg.sender;
         ownerPropertiesCount[msg.sender]++;
         emit NewProperty(id, title, info, forSale, price);

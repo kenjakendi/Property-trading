@@ -34,8 +34,7 @@
             }
         ],
         "name": "NewProperty",
-        "type": "event",
-        "signature": "0x6a26fbf1eefd4874ad7aa808e2e374297cad0ef59398566ce8d8c34a69eb9687"
+        "type": "event"
     },
     {
         "anonymous": false,
@@ -54,8 +53,7 @@
             }
         ],
         "name": "OwnerSet",
-        "type": "event",
-        "signature": "0x342827c97908e5e2f71151c08502a66d44b6f758e3ac2f1de95f02eb95f0a735"
+        "type": "event"
     },
     {
         "inputs": [
@@ -68,9 +66,7 @@
         "name": "buyProperty",
         "outputs": [],
         "stateMutability": "payable",
-        "type": "function",
-        "payable": true,
-        "signature": "0x6fa830a6"
+        "type": "function"
     },
     {
         "inputs": [
@@ -88,8 +84,7 @@
         "name": "changeInfo",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0x5c7cb991"
+        "type": "function"
     },
     {
         "inputs": [
@@ -102,8 +97,7 @@
         "name": "changeOwner",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0xa6f9dae1"
+        "type": "function"
     },
     {
         "inputs": [
@@ -121,8 +115,7 @@
         "name": "changePrice",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0xb3de019c"
+        "type": "function"
     },
     {
         "inputs": [
@@ -140,8 +133,7 @@
         "name": "changeTitle",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0x8ac85869"
+        "type": "function"
     },
     {
         "inputs": [
@@ -169,8 +161,7 @@
         "name": "createProperty",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0xf0ed9d24"
+        "type": "function"
     },
     {
         "inputs": [],
@@ -179,6 +170,11 @@
             {
                 "components": [
                     {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
                         "internalType": "string",
                         "name": "title",
                         "type": "string"
@@ -205,9 +201,7 @@
             }
         ],
         "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x3d51402c"
+        "type": "function"
     },
     {
         "inputs": [],
@@ -216,6 +210,11 @@
             {
                 "components": [
                     {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
                         "internalType": "string",
                         "name": "title",
                         "type": "string"
@@ -242,9 +241,7 @@
             }
         ],
         "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x6bdfa801"
+        "type": "function"
     },
     {
         "inputs": [],
@@ -253,6 +250,11 @@
             {
                 "components": [
                     {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
                         "internalType": "string",
                         "name": "title",
                         "type": "string"
@@ -279,9 +281,7 @@
             }
         ],
         "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x397f7952"
+        "type": "function"
     },
     {
         "inputs": [],
@@ -294,9 +294,7 @@
             }
         ],
         "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x893d20e8"
+        "type": "function"
     },
     {
         "inputs": [
@@ -311,6 +309,11 @@
             {
                 "components": [
                     {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
                         "internalType": "string",
                         "name": "title",
                         "type": "string"
@@ -337,9 +340,7 @@
             }
         ],
         "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0xcb644897"
+        "type": "function"
     },
     {
         "inputs": [
@@ -351,6 +352,11 @@
         ],
         "name": "properties",
         "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            },
             {
                 "internalType": "string",
                 "name": "title",
@@ -373,9 +379,7 @@
             }
         ],
         "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0xf7b10808"
+        "type": "function"
     },
     {
         "inputs": [],
@@ -388,9 +392,7 @@
             }
         ],
         "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x4293fd3c"
+        "type": "function"
     },
     {
         "inputs": [
@@ -403,7 +405,6 @@
         "name": "toggleForSale",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0xa32018b9"
+        "type": "function"
     }
 ]
