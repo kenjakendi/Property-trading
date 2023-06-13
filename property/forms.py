@@ -34,7 +34,7 @@ class NewPropertyForm(forms.ModelForm):
 class EditPropertyForm(forms.ModelForm):
     class Meta:
         model = Property
-        fields = ('name', 'description', 'price', 'image', 'is_sold')
+        fields = ('name', 'description', 'price', 'image', 'for_sale')
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': INPUT_CLASSES
