@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 
-from .forms import NewPropertyForm, EditPropertyForm
+from .forms import NewPropertyForm, EditPropertyForm, BuyPropertyForm
 from .models import Category, Property
 
 
@@ -75,6 +75,35 @@ def edit_property(request, pk):
         'title': 'Edit property',
     })
 
+@login_required
+def buy_property(request, pk):
+    property_object = get_object_or_404(Property, pk=pk)
+    related_items = Property.objects.filter(category=property_object.category, for_sale=True).exclude(pk=pk)[0:3]
+
+    return render(request, 'property/buy.html', {
+        'property': property_object,
+        'related_items': related_items
+    })   
+
+
+"""
+    property_object = get_object_or_404(Property, pk=pk)
+
+    if request.method == 'POST':
+        form = BuyPropertyForm(request.POST, request.FILES, instance=property_object)
+
+        print(created_by=request.user)
+
+        if form.is_valid():
+            form.save()
+
+            return redirect('property:get_property_details', pk=property_object.id)
+    else:
+        form = BuyPropertyForm(instance=property_object)
+
+    return render(request, 'property/buy.html', {})
+"""
+    
 
 @login_required
 def delete_property(request, pk):

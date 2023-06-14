@@ -49,3 +49,21 @@ class EditPropertyForm(forms.ModelForm):
                 'class': INPUT_CLASSES
             })
         }
+class BuyPropertyForm(forms.ModelForm):
+    class Meta:
+        model = Property
+        fields = ('name', 'description', 'price', 'image', 'for_sale')
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'description': forms.Textarea(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'price': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'image': forms.FileInput(attrs={
+                'class': INPUT_CLASSES
+            })
+        }
