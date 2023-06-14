@@ -71,7 +71,7 @@ def request_message(request):
       "chainId": 1337,
       "address": data['address'],
       "statement": "Please confirm",
-      "uri": "HTTP://127.0.0.1:7545",
+      "uri": cfg.get('APP_CONF', 'ganache_url'),
       "expirationTime": "2025-01-01T00:00:00.000Z",
       "notBefore": "2020-01-01T00:00:00.000Z",
       "timeout": 15
