@@ -1,9 +1,12 @@
 from web3 import Web3
+from configparser import ConfigParser
 import json
 
 class WebManager:
-    w3 = Web3(Web3.HTTPProvider('HTTP://172.31.240.1:7455'))
-    contract_address = '0xf6bd5F21Ad22F7137a56Abfe5345e5D56a0B90E9'
+    cfg = ConfigParser()
+    cfg.read("conf/cfg.conf")
+    w3 = Web3(Web3.HTTPProvider(cfg.get('APP_CONF', 'ganache_url')))
+    contract_address = cfg.get('APP_CONF', 'contract_address')
     contract_abi_file = 'web/contract_abi.json'
 
     def __init__(self, address):
@@ -21,42 +24,28 @@ class WebManager:
 
     # Modify Property
     def changeTitle(self, id, title):
-        try:
-            self.contract.functions.changeTitle(id, title).transact()
-        except:
-            pass
+        self.contract.functions.changeTitle(id, title).transact()
 
     def changeInfo(self, id, info):
-        try:
-            self.contract.functions.changeInfo(id, info).transact()
-        except:
-            pass
+        self.contract.functions.changeInfo(id, info).transact()
 
     def changePrice(self, id, price):
-        try:
-            self.contract.functions.changePrice(id, price).transact()
-        except:
-            pass    
+        self.contract.functions.changePrice(id, price).transact()
 
     def toggleForSale(self, id):
-        try:
-            self.contract.functions.toggleForSale(id).transact()
-        except:
-            pass
+        self.contract.functions.toggleForSale(id).transact()
 
     def changePropertyParams(self, id, title, info, for_sale, price):
-        try: 
-            property = self.getAllProperties()[id]
-            if property[1] != title:
-                self.changeTitle(id, title)
-            if property[2] != info:
-                self.changeInfo(id, info)
-            if property[3] != for_sale:
-                self.toggleForSale(id)
-            if property[4] != price:
-                self.changePrice(id, price)
-        except:
-            pass
+        id -= 1
+        property = self.getAllProperties()[id]
+        if property[1] != title:
+            self.changeTitle(id, title)
+        if property[2] != info:
+            self.changeInfo(id, info)
+        if property[3] != for_sale:
+            self.toggleForSale(id)
+        if property[4] != price:
+            self.changePrice(id, price)
 
     # Using Contract
     def createProperty(self, title, info, is_for_sale, price):
@@ -64,12 +53,10 @@ class WebManager:
         self.w3.eth.wait_for_transaction_receipt(tx_hash)
 
     def buyProperty(self, id):
-        try:
-            property = self.getAllProperties()[id]
-            tx_hash = self.contract.functions.buyProperty(id).transact({'value': property[4]})
-            self.w3.eth.wait_for_transaction_receipt(tx_hash)
-        except:
-            pass
+        id -= 1
+        property = self.getAllProperties()[id]
+        tx_hash = self.contract.functions.buyProperty(id).transact({'value': property[4]})
+        self.w3.eth.wait_for_transaction_receipt(tx_hash)
 
     # Get from contract
     def getAllProperties(self):
@@ -81,7 +68,8 @@ class WebManager:
     def getOwnerProperties(self, owner_address):
         try:
             return self.contract.functions.getOwnerProperties(owner_address).call()
-        except:
+        except Exception as e:
+            print(e)
             return []
         
     def getMyProperties(self):

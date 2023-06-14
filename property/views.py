@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from .forms import NewPropertyForm, EditPropertyForm, BuyPropertyForm
 from .models import Category, Property
+from web.WebManager import  WebManager
 
 
 def get_properties(request):
@@ -45,6 +46,9 @@ def create_new_property(request):
             property_object = form.save(commit=False)
             property_object.created_by = request.user
             property_object.save()
+            web3_mg = WebManager(request.user.username)
+            web3_mg.createProperty(property_object.name, property_object.description, property_object.for_sale,
+                                   int(property_object.price))
 
             return redirect('property:get_property_details', pk=property_object.id)
     else:
@@ -65,7 +69,10 @@ def edit_property(request, pk):
 
         if form.is_valid():
             form.save()
-
+            web3_mg = WebManager(request.user.username)
+            web3_mg.changePropertyParams(pk, form.cleaned_data['name'], form.cleaned_data['description'],
+                                         form.cleaned_data['for_sale'], int(form.cleaned_data['price']))
+            #print(web3_mg.getMyProperties())
             return redirect('property:get_property_details', pk=property_object.id)
     else:
         form = EditPropertyForm(instance=property_object)
@@ -75,39 +82,22 @@ def edit_property(request, pk):
         'title': 'Edit property',
     })
 
+
 @login_required
 def buy_property(request, pk):
     property_object = get_object_or_404(Property, pk=pk)
     related_items = Property.objects.filter(category=property_object.category, for_sale=True).exclude(pk=pk)[0:3]
 
+    if request.method == 'POST':
+        property_object.created_by = request.user
+        property_object.for_sale = False
+        property_object.save()
+        web3_mg = WebManager(request.user.username)
+        web3_mg.buyProperty(pk)
+
+        return redirect('property:get_property_details', pk=property_object.id)
+
     return render(request, 'property/buy.html', {
         'property': property_object,
         'related_items': related_items
-    })   
-
-
-"""
-    property_object = get_object_or_404(Property, pk=pk)
-
-    if request.method == 'POST':
-        form = BuyPropertyForm(request.POST, request.FILES, instance=property_object)
-
-        print(created_by=request.user)
-
-        if form.is_valid():
-            form.save()
-
-            return redirect('property:get_property_details', pk=property_object.id)
-    else:
-        form = BuyPropertyForm(instance=property_object)
-
-    return render(request, 'property/buy.html', {})
-"""
-    
-
-@login_required
-def delete_property(request, pk):
-    property_object = get_object_or_404(Property, pk=pk, created_by=request.user)
-    property_object.delete()
-
-    return redirect('dashboard:index')
+    })
