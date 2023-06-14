@@ -1,9 +1,6 @@
 import json
 import requests
 
-
-from django.shortcuts import render, redirect
-
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login
@@ -12,8 +9,13 @@ from django.contrib.auth.models import User
 from property.models import Category, Property
 
 from .forms import SignupForm
+from configparser import ConfigParser
 
-API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjdkMjNhMDliLWJjNTYtNGM2Yy04MGIzLWU5ZjRmZDZkMjI0ZSIsIm9yZ0lkIjoiMzQzMTI5IiwidXNlcklkIjoiMzUyNzQwIiwidHlwZUlkIjoiNTZhN2MzNDktNWJkMC00MGM1LWJjMmItYWJlMzhiN2E3YzhhIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2ODY2Njk3NDYsImV4cCI6NDg0MjQyOTc0Nn0.3WDoQapEDbyXQM043zltS-0-TsO1dgwm2t6Ud5-Dkuo'
+
+cfg = ConfigParser()
+cfg.read("../conf/cfg.conf")
+API_KEY = cfg.get('APP_CONF', 'moralis_api_key')
+
 if API_KEY == 'WEB3_API_KEY_HERE':
     print("API key is not set")
     raise SystemExit

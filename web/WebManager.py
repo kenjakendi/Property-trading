@@ -1,9 +1,12 @@
 from web3 import Web3
+from configparser import ConfigParser
 import json
 
 class WebManager:
-    w3 = Web3(Web3.HTTPProvider('HTTP://172.31.240.1:7455'))
-    contract_address = '0xf6bd5F21Ad22F7137a56Abfe5345e5D56a0B90E9'
+    cfg = ConfigParser()
+    cfg.read("../conf/cfg.conf")
+    w3 = Web3(Web3.HTTPProvider(cfg.get('APP_CONF', 'ganache_url')))
+    contract_address = cfg.get('APP_CONF', 'contract_address')
     contract_abi_file = 'web/contract_abi.json'
 
     def __init__(self, address):
