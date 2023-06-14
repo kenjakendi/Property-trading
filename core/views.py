@@ -13,7 +13,7 @@ from configparser import ConfigParser
 
 
 cfg = ConfigParser()
-cfg.read("../conf/cfg.conf")
+cfg.read("conf/cfg.conf")
 API_KEY = cfg.get('APP_CONF', 'moralis_api_key')
 
 if API_KEY == 'WEB3_API_KEY_HERE':
