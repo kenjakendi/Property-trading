@@ -27,6 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
 
 # Application definition
 
@@ -37,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'core',
+    'dashboard',
+    'property',
 ]
 
 MIDDLEWARE = [
@@ -54,8 +61,7 @@ ROOT_URLCONF = 'property_trading.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -116,9 +122,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+
 STATIC_URL = 'static/'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+STATICFILES_DIRS = (
+BASE_DIR/'static',
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MORALIS_APPLICATION_ID = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjE4OTgzOTQ5LWQ4YjUtNDRmMi05ZjU4LTM0MzQ4ZTk1YjA2ZiIsIm9yZ0lkIjoiMzQzMTg3IiwidXNlcklkIjoiMzUyODAwIiwidHlwZUlkIjoiYzU3NTI3YjMtYTU4Yi00ZDZlLTg1MTAtZTljZWQ1ODQ0N2I5IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2ODY2ODY0MDgsImV4cCI6NDg0MjQ0NjQwOH0.y7LRVW9zJz67xOzJfxn6cOCJVlc2l-GDeWplElNr2_s'
+MORALIS_SERVER_URL = 'http://127.0.0.1:7545'  # Adres URL Ganache

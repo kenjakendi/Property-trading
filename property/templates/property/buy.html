@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ property.name }}{% endblock %}
+
+{% block content %}
+<form method="post" action="." enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="grid grid-cols-5 gap-6">
+        <div class="col-span-3">
+            <img src="{{ property.image.url }}" class="rounded-xl">
+        </div>
+
+        <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
+            <div class="mt-6 p-6 bg-white rounded-xl flex justify-center items-center">
+                <div class="text-center">
+                    <p style="font-size: 20px;">Are you sure you want to buy this property?</p>
+                    <br>
+                    <p><strong style="font-size: 18px;">From:</strong> {{ property.created_by }}</p>
+                    <hr style="margin: 10px 0;">
+                    <p><strong style="font-size: 18px;">To:</strong> {{ request.user }}</p>
+                    <hr style="margin: 10px 0;">
+                    <p><strong style="font-size: 18px;">For:</strong> {{ property.price }}</p>
+                    <br>
+                    <button type="submit" class="inline-block mt-0 px-12 py-8 text-xl font-semibold bg-red-500 text-white rounded-xl">Buy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
