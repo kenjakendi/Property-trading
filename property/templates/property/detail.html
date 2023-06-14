@@ -22,12 +22,20 @@
         {% endif %}
 
         {% if request.user == property.created_by %}
-            <div class="mt-6 p-6 bg-white rounded-xl">
-                <p>This is your property!</p>
-
-                <a href="{% url 'property:edit_property' property.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl">Edit</a>
-                <a href="{% url 'property:delete_property' property.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl">Delete</a>
+        <div class="mt-6 p-6 bg-white rounded-xl text-center">
+            <p>This is your property!</p>
+        
+            <a href="{% url 'property:edit_property' property.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl">Edit</a>
+            <a href="{% url 'property:delete_property' property.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl">Delete</a>
+        </div>
+         {% endif %}
+         {% if request.user != property.created_by %}
+         <div class="mt-6 p-6 bg-white rounded-xl flex justify-center items-center">
+            <div class="text-center">
+                <p>Do you want to buy this property?</p>
+                <a href="{% url 'property:buy_property' property.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl">Buy</a>
             </div>
+        </div>
          {% endif %}
     </div>
 </div>
