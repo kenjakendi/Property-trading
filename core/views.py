@@ -1,12 +1,26 @@
+import json
+import requests
+
+
 from django.shortcuts import render, redirect
+
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 
 from property.models import Category, Property
 
 from .forms import SignupForm
 
+API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjdkMjNhMDliLWJjNTYtNGM2Yy04MGIzLWU5ZjRmZDZkMjI0ZSIsIm9yZ0lkIjoiMzQzMTI5IiwidXNlcklkIjoiMzUyNzQwIiwidHlwZUlkIjoiNTZhN2MzNDktNWJkMC00MGM1LWJjMmItYWJlMzhiN2E3YzhhIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2ODY2Njk3NDYsImV4cCI6NDg0MjQyOTc0Nn0.3WDoQapEDbyXQM043zltS-0-TsO1dgwm2t6Ud5-Dkuo'
+if API_KEY == 'WEB3_API_KEY_HERE':
+    print("API key is not set")
+    raise SystemExit
+
 
 def index(request):
-    properties = Property.objects.filter(is_sold=False)[0:6]
+    properties = Property.objects.filter(for_sale=True)[0:6]
     categories = Category.objects.all()
 
     return render(request, 'core/index.html', {
@@ -17,6 +31,9 @@ def index(request):
 
 def contact(request):
     return render(request, 'core/contact.html')
+
+def profile(request):
+    return render(request, 'core/profile.html')
 
 
 def signup(request):
@@ -33,3 +50,63 @@ def signup(request):
     return render(request, 'core/signup.html', {
         'form': form
     })
+
+
+def moralis_auth(request):
+    return render(request, 'core/sync.html', {})
+
+
+def my_profile(request):
+    return render(request, 'core/profile.html', {})
+
+
+def request_message(request):
+    data = json.loads(request.body)
+    print(data)
+    REQUEST_URL = 'https://authapi.moralis.io/challenge/request/evm'
+    request_object = {
+      "domain": "localhost",
+      "chainId": 1337,
+      "address": data['address'],
+      "statement": "Please confirm",
+      "uri": "HTTP://127.0.0.1:7545",
+      "expirationTime": "2025-01-01T00:00:00.000Z",
+      "notBefore": "2020-01-01T00:00:00.000Z",
+      "timeout": 15
+    }
+    x = requests.post(
+        REQUEST_URL,
+        json=request_object,
+        headers={'X-API-KEY': API_KEY})
+    return JsonResponse(json.loads(x.text))
+def verify_message(request):
+    data = json.loads(request.body)
+    print(data)
+    REQUEST_URL = 'https://authapi.moralis.io/challenge/verify/evm'
+    x = requests.post(
+        REQUEST_URL,
+        json=data,
+        headers={'X-API-KEY': API_KEY})
+    print(json.loads(x.text))
+    print(x.status_code)
+    if x.status_code == 201:
+        # user can authenticate
+        eth_address=json.loads(x.text).get('address')
+        print("eth address", eth_address)
+        try:
+            user = User.objects.get(username=eth_address)
+        except User.DoesNotExist:
+            user = User(username=eth_address)
+            user.is_staff = False
+            user.is_superuser = False
+            user.save()
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                request.session['auth_info'] = data
+                request.session['verified_data'] = json.loads(x.text)
+                return JsonResponse({'user': user.username})
+            else:
+                return JsonResponse({'error': 'account disabled'})
+    else:
+        return JsonResponse(json.loads(x.text))

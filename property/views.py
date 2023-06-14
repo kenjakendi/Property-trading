@@ -10,7 +10,7 @@ def get_properties(request):
     query = request.GET.get('query', '')
     category_id = request.GET.get('category', 0)
     categories = Category.objects.all()
-    properties = Property.objects.filter(is_sold=False)
+    properties = Property.objects.filter(for_sale=True)
 
     if category_id:
         properties = properties.filter(category_id=category_id)
@@ -28,7 +28,7 @@ def get_properties(request):
 
 def get_property_details(request, pk):
     property_object = get_object_or_404(Property, pk=pk)
-    related_items = Property.objects.filter(category=property_object.category, is_sold=False).exclude(pk=pk)[0:3]
+    related_items = Property.objects.filter(category=property_object.category, for_sale=True).exclude(pk=pk)[0:3]
 
     return render(request, 'property/detail.html', {
         'property': property_object,
