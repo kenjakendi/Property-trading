@@ -72,7 +72,7 @@ def edit_property(request, pk):
             web3_mg = WebManager(request.user.username)
             web3_mg.changePropertyParams(pk, form.cleaned_data['name'], form.cleaned_data['description'],
                                          form.cleaned_data['for_sale'], int(form.cleaned_data['price']))
-            print(web3_mg.getMyProperties())
+            #print(web3_mg.getMyProperties())
             return redirect('property:get_property_details', pk=property_object.id)
     else:
         form = EditPropertyForm(instance=property_object)

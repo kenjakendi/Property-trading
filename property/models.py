@@ -18,7 +18,7 @@ class Property(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     address = models.TextField(blank=True, null=True)
-    price = models.FloatField()
+    price = models.BigIntegerField()
     image = models.ImageField(upload_to='property_images', default='../static/default_home.jpg', blank=True, null=True)
     for_sale = models.BooleanField(default=True)
     created_by = models.ForeignKey(User, related_name='properties', on_delete=models.CASCADE)
